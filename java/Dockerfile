@@ -1,8 +1,11 @@
-# Use OpenJDK with Maven and Gradle preinstalled
-FROM maven:3.8.6-openjdk-17-slim AS builder
+# Description: A Dockerfile for Java projects
+FROM --platform=$TARGETPLATFORM amazoncorretto:17-alpine-jdk
 
 # Set a working directory for Java projects
 WORKDIR /app
+
+# Install Maven (optional)
+RUN apt-get update && apt-get install -y maven
 
 # Install Gradle (optional)
 RUN apt-get update && apt-get install -y gradle
