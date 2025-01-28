@@ -1,4 +1,4 @@
-name: Build and Push Spring Boot Docker Image
+name: Build and Push Java Runner Docker Image
 
 on:
   workflow_dispatch:
