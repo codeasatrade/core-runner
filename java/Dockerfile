@@ -4,9 +4,6 @@ FROM maven:3.9.9.amazoncorretto-17-alpine
 # Set a working directory for Java projects
 WORKDIR /app
 
-# Install Maven (optional)
-RUN apt-get update && apt-get install -y maven
-
 # Install Gradle (optional)
 RUN apt-get update && apt-get install -y gradle
 
