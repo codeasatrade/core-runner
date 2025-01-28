@@ -1,5 +1,5 @@
 # Description: A Dockerfile for Java projects
-FROM maven:3.9.9.amazoncorretto-17-alpine
+FROM maven:3.9.9-amazoncorretto-17-alpine
 
 # Set a working directory for Java projects
 WORKDIR /app
