@@ -6,7 +6,7 @@ FROM maven:3.9-sapmachine-17 AS dependencies
 WORKDIR /app
 
 # Copy the pom.xml and download dependencies
-COPY global-pom.xml .
+COPY global-pom.xml pom.xml
 
 # Resolve dependencies and plugins (without compiling the code)
 RUN mvn dependency:resolve-plugins dependency:go-offline -B
