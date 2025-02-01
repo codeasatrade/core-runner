@@ -5,7 +5,7 @@ cd /app
 
 # Check if it's a Maven project
 if [ -f "pom.xml" ]; then
-  mvn clean install
+  mvn clean install -o
   mvn exec:java -Dexec.mainClass="${MAIN_CLASS:-com.example.Main}"
   
 # Check if it's a Gradle project
