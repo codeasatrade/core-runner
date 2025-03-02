@@ -20,14 +20,24 @@ WORKDIR /app
 COPY --from=dependencies /root/.m2 /root/.m2
 
 # copy the source code
-COPY java-projects /app/
+COPY java-projects /app/java-projects
 
-# Copy an entrypoint script (see step 2)
-COPY entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
+# copy the execution engine source code
+COPY javaExecutionEngine /app/javaExecutionEngine
 
-# Set the entrypoint to handle compilation/execution
-ENTRYPOINT ["/entrypoint.sh"]
+# Run mvn package inside the javaExecutionEngine folder
+WORKDIR /app/javaExecutionEngine
+
+RUN mvn package
+
+# Copy the JAR file only
+WORKDIR /app
+COPY /javaExecutionEngine/target/javaExecutionEngine-3.4.3.jar app.jar
+
+# Remove main source code
+RUN rm -rf /app/javaExecutionEngine
+
+ENTRYPOINT ["java", "-Dspring.profiles.active=prod", "-jar", "app.jar"]
 
 # Expose the port your application runs on
 EXPOSE 49000

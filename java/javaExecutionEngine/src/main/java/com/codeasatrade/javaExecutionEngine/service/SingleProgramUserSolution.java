@@ -1,4 +1,4 @@
 package com.codeasatrade.javaExecutionEngine.service;
 
-public record SingleProgramUserSolution() {
+public record SingleProgramUserSolution(String code) {
 }

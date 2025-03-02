@@ -1,0 +1,11 @@
+# for development purposes
+services:
+  local-java-runner:
+    container_name: ss
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.dev
+
+    ports:
+      - "49200:49000"
+      - "5005:5005"

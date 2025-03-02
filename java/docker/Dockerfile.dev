@@ -1,0 +1,54 @@
+# Description: A Dockerfile for Java projects
+# Stage 1: Download dependencies and plugins
+FROM maven:3.9-sapmachine-17 AS dependencies
+
+# Set a working directory for Java projects
+WORKDIR /app
+
+# Copy the pom.xml and download dependencies
+# COPY global-pom.xml pom.xml
+
+# Resolve dependencies and plugins (without compiling the code)
+# RUN mvn dependency:resolve-plugins dependency:go-offline -B
+
+# Stage 2: Copy source code and cached dependencies
+# FROM maven:3.9-sapmachine-17 AS builder
+
+# WORKDIR /app
+
+# Copy POM files and cached dependencies from the previous stage
+# COPY --from=dependencies /root/.m2 /root/.m2
+
+# copy the source code
+COPY java-projects /app/java-projects
+
+# copy the execution engine source code
+# COPY javaExecutionEngine /app/javaExecutionEngine
+
+# Run mvn package inside the javaExecutionEngine folder
+# WORKDIR /app/javaExecutionEngine
+
+# RUN mvn clean package
+
+# RUN ls target/
+
+# Copy the JAR file only
+# WORKDIR /app
+# RUN ls 
+
+COPY /javaExecutionEngine/target/cat-java-execution-engine.jar app.jar
+
+# Remove main source code
+# RUN rm -rf /app/javaExecutionEngine
+
+RUN chmod 777 app.jar
+
+RUN ls
+
+# agentlib Also enables remote debugging
+ENTRYPOINT ["java", "-Dspring.profiles.active=prod", "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005", "-jar", "app.jar"]
+# ENTRYPOINT ["java", "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005", "-jar", "app.jar"]
+
+
+# Expose the port your application runs on
+EXPOSE 49000

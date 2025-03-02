@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>com.codeasatrade</groupId>
 	<artifactId>javaExecutionEngine</artifactId>
-	<version>0.0.2-SNAPSHOT</version>
+	<version>0.0.1-SNAPSHOT</version>
 	<name>javaExecutionEngine</name>
 	<description>Java Execution Engine Server</description>
 	<url/>
@@ -34,6 +34,11 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-api</artifactId>
+			<version>2.23.1</version>
+		</dependency>
 
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -52,15 +57,11 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
-                <version>3.2.0</version>
-                <configuration>
-                    <finalName>cat-core</finalName>
-                </configuration>
+				<configuration>
+					<mainClass>com.codeasatrade.javaExecutionEngine.JavaExecutionEngineApplication</mainClass>
+				</configuration>
             </plugin>
         </plugins>
+		<finalName>cat-java-execution-engine</finalName>
     </build>
 </project>
