@@ -1,6 +1,7 @@
 package com.codeasatrade.javaExecutionEngine.service;
 
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
@@ -15,21 +16,24 @@ import java.nio.file.Paths;
 import java.util.List;
 import java.util.Objects;
 
-@Slf4j
 @Service
 public class ExecutorService {
 
     @Autowired
     private Environment environment;
+    private static final Logger log = LoggerFactory.getLogger(ExecutorService.class);
 
-
-    public String executeSingleProgram(String userCode) {
-        var result = "";
+    public String executeSingleProgram(SingleProgramUserSolution userCode) {
+        var result = "error";
         final String tempUserProgram = "Solution.java";
         final String tempUserProgramClass = "Solution";
-        String dirPath = Objects.equals(environment.getProperty("spring.profiles.active"), "prod") ? "/app/java-projects" : "../java-projects";
-        createUserProgramFile(userCode, dirPath, tempUserProgram);
 
+        log.info("Execution single program");
+        String dirPath = Objects.equals(environment.getProperty("spring.profiles.active"), "prod") ? "/app/java-projects" : "../java-projects";
+        //1. Creating the program file
+        createUserProgramFile(userCode.code(), dirPath, tempUserProgram);
+
+        //2. Execute the program file
         List<List<String>> lsCmds = List.of(
                 List.of("ls"), List.of("javac", tempUserProgram), List.of("ls"), List.of("java", tempUserProgramClass), List.of("ls"));
 
@@ -64,14 +68,15 @@ public class ExecutorService {
 
         try {
             Process process = pb.start();
-            BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+            int exitCode = process.waitFor();
+            BufferedReader reader = new BufferedReader(new InputStreamReader(exitCode == 0? process.getInputStream() : process.getErrorStream()));
             while (true) {
                 String sl = reader.readLine();
                 if (sl == null) break;
                 line += sl + "\n";
 //                System.out.println(line);
             }
-            int exitCode = process.waitFor();
+
 //            System.out.println("exitCode" + exitCode);
             process.destroy();
         } catch (IOException e) {

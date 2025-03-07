@@ -1,4 +1,7 @@
 package com.codeasatrade.javaExecutionEngine.service;
 
-public record SingleProgramUserSolution(String code) {
+import java.util.List;
+import java.util.Map;
+
+public record SingleProgramUserSolution(String code, Map<String, List<String>> testCases) {
 }
