@@ -25,8 +25,10 @@ public class ExecutorService {
 
     public String executeSingleProgram(SingleProgramUserSolution userCode) {
         var result = "error";
-        final String tempUserProgram = "Solution.java";
-        final String tempUserProgramClass = "Solution";
+        final String tempUserProgram = "Answer.java";
+        final String tempUserProgramClass = "Answer";
+        final String testerProgram = "Tester.java";
+        final String testerProgramClass = "Tester";
 
         log.info("Execution single program");
         String dirPath = Objects.equals(environment.getProperty("spring.profiles.active"), "prod") ? "/app/java-projects" : "../java-projects";
@@ -35,12 +37,21 @@ public class ExecutorService {
 
         //2. Execute the program file
         List<List<String>> lsCmds = List.of(
-                List.of("ls"), List.of("javac", tempUserProgram), List.of("ls"), List.of("java", tempUserProgramClass), List.of("ls"));
+                List.of("ls"),
+                List.of("javac", tempUserProgram),
+                List.of("javac", testerProgram)
+                ,List.of("ls")
+                ,List.of("java", testerProgramClass)
+//                ,List.of("java", tempUserProgramClass)
+                ,List.of("ls")
+                );
 
         for (List<String> cmd : lsCmds) {
             String op = execute(dirPath, cmd);
             if (cmd.get(0).equals("java")) result = op;
         }
+
+
 
         //clean up
         List<List<String>> cleanUpCmds = List.of(List.of("rm", tempUserProgram), List.of("rm", tempUserProgramClass + ".class"));
